@@ -17,7 +17,7 @@ resource "aws_internet_gateway" "myigw" {
       })
   }   
 resource "aws_subnet" "publicsubnet" {
-  count = 2
+  count = length(var.public_subnet)
   vpc_id     = aws_vpc.myvpc.id
   cidr_block =  var.public_subnet[count.index]
   availability_zone = var.availability_zone[count.index]
@@ -30,7 +30,7 @@ resource "aws_subnet" "publicsubnet" {
       })
 }
 resource "aws_subnet"  "privatesubnet" {
-     count = 2
+     count = length(var.private_subnet)
      vpc_id  = aws_vpc.myvpc.id
      cidr_block = var.private_subnet[count.index]
      availability_zone = var.availability_zone[count.index]
