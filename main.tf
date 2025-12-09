@@ -20,12 +20,13 @@ resource "aws_subnet" "publicsubnet" {
   count = length(var.public_subnet)
   vpc_id     = aws_vpc.myvpc.id
   cidr_block =  var.public_subnet[count.index]
-  availability_zone = var.availability_zone[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  # availability_zone = var.availability_zones[count.index]
   #availability_zone = aws_subnet.publicsubnet
   enable_resource_name_dns_a_record_on_launch = true
   tags = merge(local.commontag, 
        { 
-        Name = "${local.name}-pub-${var.availability_zone[count.index]}"
+        Name = "${local.name}-pub-${data.aws_availability_zones.available.names[count.index]}"
         Create_date_time = local.time
       })
 }
@@ -33,21 +34,21 @@ resource "aws_subnet"  "privatesubnet" {
      count = length(var.private_subnet)
      vpc_id  = aws_vpc.myvpc.id
      cidr_block = var.private_subnet[count.index]
-     availability_zone = var.availability_zone[count.index]
+     availability_zone = data.aws_availability_zones.available.names[count.index]
       tags = merge(local.commontag, 
        { 
-        Name = "${local.name}-private-${var.availability_zone[count.index]}"
+        Name = "${local.name}-private-${data.aws_availability_zones.available.names[count.index]}"
         Create_date_time = local.time
       })
 }
 resource "aws_subnet"  "dbsubnet" {
-     count = 2
+     count = length(var.db_subnet)
      vpc_id  = aws_vpc.myvpc.id
      cidr_block = var.db_subnet[count.index]
-     availability_zone = var.availability_zone[count.index]
+     availability_zone = data.aws_availability_zones.available.names[count.index]
      tags = merge(local.commontag, 
        { 
-        Name = "${local.name}-database-${var.availability_zone[count.index]}"
+        Name = "${local.name}-database-${data.aws_availability_zones.available.names[count.index]}"
         Create_date_time = local.time
       })
 }
