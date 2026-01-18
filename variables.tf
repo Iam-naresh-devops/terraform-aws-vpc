@@ -10,6 +10,9 @@ variable "common_tags" {
         Admin_email = "admin.roboshop@gmail.com"
     }
 }  
+variable "tags" {
+  
+}
 variable "vpc" {
    type = map
    default = {}
