@@ -2,13 +2,13 @@ resource "aws_vpc_peering_connection" "vpc_peer" {
     
   count  =  var.is_vpc_peer_required ? 1 : 0
   peer_vpc_id   = var.accepter_peer_id == "" ? data.aws_vpc.default.id : var.accepter_peer_id
-  vpc_id        = aws_vpc.myvpc.id
+  vpc_id        = aws_vpc.vpc_module.id
   auto_accept   = true
 
   tags = merge(local.commontag, 
        { 
         Name = "${local.name}-DEFAULT-MYVPC-PEERING"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 

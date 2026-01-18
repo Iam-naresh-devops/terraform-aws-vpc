@@ -12,7 +12,7 @@
 # value = aws_subnet.dbsubnet[count.index].cidr_block
 # }
 output "vpc_id" {
-    value = aws_vpc.myvpc.id
+    value = aws_vpc.vpc_module.id
 }
 output "public_subnet_ids" {
     value = aws_subnet.publicsubnet[*].id
