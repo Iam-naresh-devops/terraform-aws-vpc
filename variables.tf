@@ -16,8 +16,8 @@ variable "common_tags" {
 variable "name" {
   type   = string
 }
-variable "var.region" {
-  
+variable "region" {
+  type   = string
 }
 variable "vpc" {
    type = map
