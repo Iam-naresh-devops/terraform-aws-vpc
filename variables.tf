@@ -11,7 +11,7 @@ variable "common_tags" {
     }
 }  
 variable "tags" {
-  
+  type = map(string)
 }
 variable "vpc" {
    type = map
