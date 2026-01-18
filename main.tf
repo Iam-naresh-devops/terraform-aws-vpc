@@ -4,7 +4,7 @@ resource "aws_vpc" "vpc_module" {
  
    tags = merge(local.commontag, 
        { 
-        Name = "${local.name}-"
+        Name = "${local.name}-${var.name}"
         
       })
     

@@ -8,12 +8,13 @@ variable "common_tags" {
         Createdby = "terraform",
         Costcenter = "FIN-006-BY-NAR-CLOUD-AWS",
         Admin_email = "admin.roboshop@gmail.com"
-        Create_date_time  = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
+        
 }
 }  
-variable "tags" {
-  type = map(string)
+variable "name" {
+  
 }
+
 variable "vpc" {
    type = map
    default = {}

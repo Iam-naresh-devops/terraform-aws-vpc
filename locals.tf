@@ -1,5 +1,6 @@
 locals { 
    name = "${var.project}-${var.environment}"
+   Create_date_time  = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
    
 }
 locals {
