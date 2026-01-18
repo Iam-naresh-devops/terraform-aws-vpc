@@ -1,12 +1,12 @@
-resource "aws_vpc" "myvpc" {
+resource "aws_vpc" "vpc_module" {
   cidr_block       = var.cidr_block
-  tags = var.tags
+  
  
-  #  tags = merge(local.commontag, 
-  #      { 
-  #       Name = "${local.name}-vpc"
-  #       Create_date_time = local.time
-  #     })
+   tags = merge(local.commontag, 
+       { 
+        Name = "${local.name}-"
+        
+      })
     
   }
 resource "aws_internet_gateway" "myigw" {

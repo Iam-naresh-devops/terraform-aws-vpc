@@ -5,10 +5,11 @@ variable "cidr_block" {
 variable "common_tags" {
      type = map(string)
      default = {
-        Createdby = "Terraform",
-        Costcenter = "FIN-005-HYD-CLOUD-AWS",
+        Createdby = "terraform",
+        Costcenter = "FIN-006-BY-NAR-CLOUD-AWS",
         Admin_email = "admin.roboshop@gmail.com"
-    }
+        Create_date_time  = formatdate("YYYY-MM-DD hh:mm:ss ZZZ", timestamp())
+}
 }  
 variable "tags" {
   type = map(string)
