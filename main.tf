@@ -10,16 +10,16 @@ resource "aws_vpc" "vpc_module" {
     
   }
 resource "aws_internet_gateway" "myigw" {
-  vpc_id = aws_vpc.myvpc.id
+  vpc_id = aws_vpc.vpc_module.id
    tags =  merge(local.commontag, 
        { 
         Name = "${local.name}-igw"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
   }   
 resource "aws_subnet" "publicsubnet" {
   count = length(var.public_subnet)
-  vpc_id     = aws_vpc.myvpc.id
+  vpc_id     = aws_vpc.vpc_module.id
   cidr_block =  var.public_subnet[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   # availability_zone = var.availability_zones[count.index]
@@ -28,29 +28,29 @@ resource "aws_subnet" "publicsubnet" {
   tags = merge(local.commontag, 
        { 
         Name = "${local.name}-pub-${data.aws_availability_zones.available.names[count.index]}"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_subnet"  "privatesubnet" {
      count = length(var.private_subnet)
-     vpc_id  = aws_vpc.myvpc.id
+     vpc_id  = aws_vpc.vpc_module.id
      cidr_block = var.private_subnet[count.index]
      availability_zone = data.aws_availability_zones.available.names[count.index]
       tags = merge(local.commontag, 
        { 
         Name = "${local.name}-private-${data.aws_availability_zones.available.names[count.index]}"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_subnet"  "dbsubnet" {
      count = length(var.db_subnet)
-     vpc_id  = aws_vpc.myvpc.id
+     vpc_id  = aws_vpc.vpc_module.id
      cidr_block = var.db_subnet[count.index]
      availability_zone = data.aws_availability_zones.available.names[count.index]
      tags = merge(local.commontag, 
        { 
         Name = "${local.name}-database-${data.aws_availability_zones.available.names[count.index]}"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_eip" "eip" {
@@ -58,7 +58,7 @@ resource "aws_eip" "eip" {
  tags = merge(local.commontag, 
        { 
         Name = "${local.name}-elastic-ip"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_nat_gateway" "nat" {
@@ -68,14 +68,14 @@ resource "aws_nat_gateway" "nat" {
   tags = merge(local.commontag, 
        { 
         Name = "${local.name}-nat"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
   # To ensure proper ordering, it is recommended to add an explicit dependency
   # on the Internet Gateway for the VPC.
   depends_on = [aws_internet_gateway.myigw]
 }
 resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.myvpc.id
+  vpc_id = aws_vpc.vpc_module.id
 
   route {
     
@@ -85,7 +85,7 @@ resource "aws_route_table" "public" {
   tags = merge(local.commontag, 
        { 
         Name = "${local.name}-RT-1-PUB"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_route_table_association" "public_subnet_asso" {
@@ -94,7 +94,7 @@ resource "aws_route_table_association" "public_subnet_asso" {
  route_table_id = aws_route_table.public.id
 }
 resource "aws_route_table" "private" {
-  vpc_id = aws_vpc.myvpc.id
+  vpc_id = aws_vpc.vpc_module.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_nat_gateway.nat.id
@@ -102,7 +102,7 @@ resource "aws_route_table" "private" {
  tags = merge(local.commontag, 
        { 
         Name = "${local.name}-RT-2-PRIVATE"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_route_table_association" "private_subnet_asso" {
@@ -111,7 +111,7 @@ resource "aws_route_table_association" "private_subnet_asso" {
  route_table_id = aws_route_table.private.id
 }
 resource "aws_route_table" "dbrt" {
-  vpc_id = aws_vpc.myvpc.id
+  vpc_id = aws_vpc.vpc_module.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_nat_gateway.nat.id
@@ -119,7 +119,7 @@ resource "aws_route_table" "dbrt" {
  tags = merge(local.commontag, 
        { 
         Name = "${local.name}-RT-3-DATABASE"
-        Create_date_time = local.time
+        Create_date_time = local.Create_date_time
       })
 }
 resource "aws_route_table_association" "DB_subnet_asso" {
