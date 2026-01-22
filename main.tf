@@ -13,7 +13,7 @@ resource "aws_vpc" "vpc_module" {
   }
 resource "aws_internet_gateway" "myigw" {
   vpc_id = aws_vpc.vpc_module.id
-  region  = var.region
+  
    tags =  merge(local.commontag, 
        { 
         Name = "${local.name}-${var.name}-igw"
@@ -24,7 +24,7 @@ resource "aws_subnet" "publicsubnet" {
   
   count = length(var.public_subnet)
   vpc_id     = aws_vpc.vpc_module.id
-  region  = var.region
+ 
   cidr_block =  var.public_subnet[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
   # availability_zone = var.availability_zones[count.index]
@@ -39,7 +39,7 @@ resource "aws_subnet" "publicsubnet" {
 resource "aws_subnet"  "privatesubnet" {
      count = length(var.private_subnet)
      vpc_id  = aws_vpc.vpc_module.id
-     region  = var.region
+     
      cidr_block = var.private_subnet[count.index]
      availability_zone = data.aws_availability_zones.available.names[count.index]
       tags = merge(local.commontag, 
@@ -51,7 +51,7 @@ resource "aws_subnet"  "privatesubnet" {
 resource "aws_subnet"  "dbsubnet" {
      count = length(var.db_subnet)
      vpc_id  = aws_vpc.vpc_module.id
-     region  = var.region
+     
      cidr_block = var.db_subnet[count.index]
      availability_zone = data.aws_availability_zones.available.names[count.index]
      tags = merge(local.commontag, 
@@ -62,7 +62,7 @@ resource "aws_subnet"  "dbsubnet" {
 }
 resource "aws_eip" "eip" {
  domain   = "vpc"
- region  = var.region
+
  tags = merge(local.commontag, 
        { 
         Name = "${var.name}-${local.name}-elastic-ip"
@@ -73,7 +73,7 @@ resource "aws_eip" "eip" {
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip.id
   subnet_id     = aws_subnet.publicsubnet[0].id
-  region  = var.region
+  
 
   tags = merge(local.commontag, 
        { 
